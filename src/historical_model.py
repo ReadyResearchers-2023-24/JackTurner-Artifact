@@ -6,7 +6,7 @@ from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 
 # Define the stock symbol and date range
-stock_symbol = 'AAPL'  # Change this to the stock symbol you want to analyze
+stock_symbol = 'AAPL'
 start_date = '2020-01-01'
 end_date = '2021-12-31'
 
