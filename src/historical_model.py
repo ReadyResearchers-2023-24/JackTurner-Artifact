@@ -16,7 +16,7 @@ data = yf.download(stock_symbol, start=start_date, end=end_date)
 # Select the 'Adj Close' column as the stock price
 df = data[['Adj Close']].reset_index()
 
-# Feature engineering (lagged features)
+# Feature engineering
 for i in range(1, 6):
     df[f'Lag_{i}'] = df['Adj Close'].shift(i)
 
