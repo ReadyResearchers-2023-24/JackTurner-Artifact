@@ -7,7 +7,7 @@ This project combines two distinct functionalities: stock price prediction using
 ### Stock Price Prediction
 The stock price prediction component employs a linear regression model to forecast the future price of a given stock based on its historical price data. This tool utilizes the Yahoo Finance API to fetch historical stock price data, engineers lagged features, trains a linear regression model, and evaluates its performance.
 
-### Preface
+#### Preface
 1. Install Poetry
 2. Clone the repository
 3. Navigate to the project directory and run `poetry install`
