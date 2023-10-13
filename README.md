@@ -28,5 +28,4 @@ As I continue to develop this project, I have several key areas of focus:
 To provide a broader context for our project, I am inspired by and acknowledge related work in the following areas:
 
 - **Sentiment analysis algorithms and applications: A survey**: The main contributions of this paper include the sophisticated categorizations of a large number of recent articles and the illustration of the recent trend of research in the sentiment analysis and its related areas.
-- 
-- ** Prediction of stock performance by using logistic regression model: evidence from Pakistan Stock Exchange**: Projects and studies that focus on predicting stock prices using historical data and machine learning techniques.
+- **Prediction of stock performance by using logistic regression model**: Projects and studies that focus on predicting stock prices using historical data and machine learning techniques.
