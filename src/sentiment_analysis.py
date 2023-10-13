@@ -24,7 +24,7 @@ def analyze_sentiment(headline):
 
 def main():
     # Read the CSV file with the format "headline, url, publisher, date, stock"
-    df = pd.read_csv('src/300_stock_headlines.csv')  # Replace with the actual file path of your CSV.
+    df = pd.read_csv('src/300_stock_headlines.csv')
 
     # Apply sentiment analysis to headlines
     df['sentiment'] = df['headline'].apply(analyze_sentiment)
