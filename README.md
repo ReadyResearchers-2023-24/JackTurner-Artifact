@@ -7,6 +7,11 @@ This project combines two distinct functionalities: stock price prediction using
 ### Stock Price Prediction
 The stock price prediction component employs a linear regression model to forecast the future price of a given stock based on its historical price data. This tool utilizes the Yahoo Finance API to fetch historical stock price data, engineers lagged features, trains a linear regression model, and evaluates its performance.
 
+### Preface
+1. Install Poetry
+2. Clone the repository
+3. Navigate to the project directory and run `poetry install`
+
 #### Usage
 1. Modify the `stock_symbol`, `start_date`, and `end_date` variables at the beginning of the script to select the stock symbol and date range for analysis.
 2. Run the script.
@@ -16,6 +21,9 @@ The stock price prediction component employs a linear regression model to foreca
 
 ### Financial News Sentiment Analysis
 The financial news sentiment analysis component retrieves financial news articles for a list of tickers, performs sentiment analysis on the headlines using the VADER algorithm, and displays the sentiment scores and headlines in a graphical user interface (GUI) built with the tkinter library.
+
+### Usage
+1. Run the script either in IDE or by typing in CLI `python3 sentiment_analysis.py`
 
 ## Future Plans
 As I continue to develop this project, I have several key areas of focus:
