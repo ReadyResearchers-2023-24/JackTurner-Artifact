@@ -3,8 +3,6 @@ from bs4 import BeautifulSoup
 import pandas as pd
 from datetime import datetime
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-
-# Download the VADER lexicon for sentiment analysis
 import nltk
 nltk.download('vader_lexicon')
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
