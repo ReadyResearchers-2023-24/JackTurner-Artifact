@@ -23,6 +23,9 @@ for i in range(1, 6):
 # Drop rows with missing values (NaN) introduced by lagging
 df = df.dropna()
 
+# Save the data to a CSV file
+df.to_csv("stock_data.csv", index=False)
+
 # Split the data into training and testing sets
 X = df.drop(["Date", "Adj Close"], axis=1)
 y = df["Adj Close"]
@@ -48,8 +51,8 @@ print(f"R-squared (R2) Score: {r2}")
 
 # Visualize the predicted vs. actual prices
 plt.figure(figsize=(12, 6))
-plt.plot(df["Date"][-len(y_test) :], y_test.values, label="Actual Price", color="blue")
-plt.plot(df["Date"][-len(y_test) :], y_pred, label="Predicted Price", color="red")
+plt.plot(df["Date"][-len(y_test):], y_test.values, label="Actual Price", color="blue")
+plt.plot(df["Date"][-len(y_test):], y_pred, label="Predicted Price", color="red")
 plt.xlabel("Date")
 plt.ylabel("Stock Price")
 plt.title(f"Stock Price Prediction for {stock_symbol}")
