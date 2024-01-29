@@ -4,7 +4,7 @@
 This project combines two distinct functionalities: stock price prediction using historical data and sentiment analysis of financial news headlines. The motivation behind this project is to provide a tool that empowers users to make data-driven decisions in the complex world of financial investments. By predicting stock prices and analyzing sentiment in financial news, I aim to offer valuable insights to investors and financial analysts.
 
 ## Technical Details
-### Stock Price Prediction
+### Historical Stock Price Prediction
 The stock price prediction component employs a linear regression model to forecast the future price of a given stock based on its historical price data. This tool utilizes the Yahoo Finance API to fetch historical stock price data, engineers lagged features, trains a linear regression model, and evaluates its performance.
 
 ### Preface

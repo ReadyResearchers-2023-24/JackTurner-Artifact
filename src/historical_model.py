@@ -59,14 +59,10 @@ def save_predictions_to_csv(dates, y_test, y_pred, stock_symbol):
     Saves the predicted vs. actual prices to a CSV file.
     """
     results_df = pd.DataFrame({
-        'Date': pd.to_datetime(dates),  # Ensure dates are in datetime format
+        'Date': dates,
         'Actual Price': y_test,
         'Predicted Price': y_pred
     })
-
-    # Sort the DataFrame by the 'Date' column
-    results_df = results_df.sort_values(by='Date')
-
     filename = f"{stock_symbol}_predictions.csv"
     results_df.to_csv(filename, index=False)
     print(f"Predictions saved to {filename}")
@@ -74,8 +70,8 @@ def save_predictions_to_csv(dates, y_test, y_pred, stock_symbol):
 if __name__ == "__main__":
     stock_symbol = "AAPL"
     start_date = "2020-01-01"
-    end_date = "2021-12-01"
-    
+    end_date = "2021-12-31"
+
     df = fetch_stock_data(stock_symbol, start_date, end_date)
     df = feature_engineering(df)
     X_train, X_test, y_train, y_test = split_data(df)
