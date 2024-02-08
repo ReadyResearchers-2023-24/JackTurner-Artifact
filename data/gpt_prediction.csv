@@ -1,0 +1,2 @@
+Prediction
+"ChatCompletionMessage(content=""Based on the provided data and the linear regression model, my prediction for the stock's closing price for tomorrow is $107.82."", role='assistant', function_call=None, tool_calls=None)"
