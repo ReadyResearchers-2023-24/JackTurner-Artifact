@@ -20,8 +20,9 @@ This project aims to predict stock prices using sentiment analysis data combined
 ## Usage
 1. Clone the repository: `git clone https://github.com/your_username/stock-price-prediction.git`
 2. Install the required dependencies: `pip install -r requirements.txt`
-3. Run the main script: `python3 gpt.py`
+3. Navigate to the `src` folder `cd src`
+4. Execute the `run_all_scripts.py` file: `python3 run_all_scripts.py`
+5. Execute the `gpt.py` script: `python3 gpt.py`
+6. Results will be displayed in the command line and stored in the `data` folder under the name: `gpt_prediction.csv`
 
-
-## License
 
