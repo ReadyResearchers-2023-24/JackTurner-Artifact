@@ -10,10 +10,10 @@ def run_script(script_path):
 def main():
     # Define the paths to your scripts
     script_paths = [
-        "combine_data.py",
         "fetch_historical_data.py",
         "fetch_sentiment_data.py",
         "predict_closing_price.py",
+        "combine_data.py"
     ]
 
     # Get the current directory of the script
