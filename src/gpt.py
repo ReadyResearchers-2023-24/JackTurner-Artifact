@@ -34,7 +34,7 @@ def make_prediction():
             },
             {
                 "role": "user",
-                "content": f"Given a dataset with daily stock prices and average sentiment scores for the last 30 days, including 'Date', 'Average Sentiment', 'Open', 'High', 'Low', 'Close', 'Volume', please simulate an analysis to predict the stock's closing price for tomorrow. Assume today's date is YYYY-MM-DD, and use 'Average Sentiment' and 'Volume' as key features in your theoretical model. Here's a summary of a linear regression analysis performed today: [insert summary here]. Based on this, predict the closing price for the next day (YYYY-MM-DD+1), focusing on the impact of 'Average Sentiment' and 'Volume'.",
+                "content": f"Given a dataset with daily stock prices and average sentiment scores for the last 30 days, including 'Date', 'Average Sentiment', 'Open', 'High', 'Low', 'Close', 'Volume', please simulate an analysis to pred    ict the stock's closing price for tomorrow. Assume today's date is YYYY-MM-DD, and use 'Average Sentiment' and 'Volume' as key features in your theoretical model. Here's a summary of a linear regression analysis performed today: [insert summary here]. Based on this, predict the closing price for the next day (YYYY-MM-DD+1), focusing on the impact of 'Average Sentiment' and 'Volume'.",
             },
         ],
     )
