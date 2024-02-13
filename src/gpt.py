@@ -1,26 +1,16 @@
 import os
 from openai import OpenAI
+import dash
+from dash import dcc, html
+from dash.dependencies import Input, Output
 import pandas as pd
 
-
-# Function to load data from the combined CSV file
-def load_data(combined_data_path, linear_regression_data):
-    df_combined = pd.read_csv(combined_data_path)
-    df_linear = pd.read_csv(linear_regression_data)
-    return df_combined, df_linear
-
-
-# Function to create summaries or extract relevant data
-def summarize_data(df_combined, df_linear):
-    combined_summary = df_combined.describe().to_string()
-    linear_regression_summary = df_linear.describe().to_string()
-    return combined_summary, linear_regression_summary
-
+# Initialize Dash app
+app = dash.Dash(__name__)
 
 # Function to set up OpenAI API key
 def setup_openai_api(api_key):
     os.environ["OPENAI_API_KEY"] = api_key
-
 
 # Function to make predictions using OpenAI
 def make_prediction(combined_summary, linear_regression_summary):
@@ -40,39 +30,29 @@ def make_prediction(combined_summary, linear_regression_summary):
     )
     return completion.choices[0].message
 
+# Define layout of Dash app
+app.layout = html.Div([
+    dcc.Textarea(id='combined-summary', placeholder='Combined Summary', rows=4, style={'width': '100%'}),
+    dcc.Textarea(id='linear-regression-summary', placeholder='Linear Regression Summary', rows=4, style={'width': '100%'}),
+    html.Button('Get Prediction', id='get-prediction-btn', n_clicks=0),
+    html.Div(id='prediction-output')
+])
 
-# Main function to orchestrate the modular components
-def main():
-    # Get the current directory of the script
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    parent_dir = os.path.abspath(os.path.join(current_dir, os.pardir))
-
-    # Path to your combined CSV file
-    combined_data_path = os.path.join(parent_dir, "data", "combined_data.csv")
-    linear_data_path = os.path.join(
-        parent_dir, "data", "linear_regression_prediction.csv"
-    )
-
-    # Load the data
-    df_combined, df_linear = load_data(combined_data_path, linear_data_path)
-
-    # Summarize the data
-    combined_summary, linear_regression_summary = summarize_data(df_combined, df_linear)
-
+# Define callback to get prediction when button is clicked
+@app.callback(
+    Output('prediction-output', 'children'),
+    [Input('get-prediction-btn', 'n_clicks')],
+    [dash.dependencies.State('combined-summary', 'value'),
+     dash.dependencies.State('linear-regression-summary', 'value')]
+)
+def get_prediction(n_clicks, combined_summary, linear_regression_summary):
     # Set up OpenAI API key
     setup_openai_api("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")
 
-    # Make a prediction
+    # Make prediction
     prediction = make_prediction(combined_summary, linear_regression_summary)
 
-    # Save prediction results to CSV
-    prediction_df = pd.DataFrame({"Prediction": [prediction]})
-    prediction_df.to_csv(
-        os.path.join(current_dir, "../data/gpt_prediction.csv"), index=False
-    )
+    return prediction
 
-    print("Prediction:", prediction)
-
-
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    app.run_server(debug=True)
