@@ -30,11 +30,11 @@ def make_prediction(combined_summary, linear_regression_summary):
         messages=[
             {
                 "role": "system",
-                "content": "You are a Predictive Modeler. You will be tasked with generating predictive analytics based on data. This involves interpreting the data you've processed and making forecasts, such as predicting stock prices. Your output needs to be a prediction, not a set of instructions. I want you to give me your prediction for the next day. ",
+                "content": "You are a Predictive Modeler tasked with generating theoretical predictive analytics. Your output should be a hypothetical prediction based on provided data and insights, not real-time analysis or data processing. ",
             },
             {
                 "role": "user",
-                "content": f"Given the attached CSV file named 'combined_data.csv', which contains daily stock prices and average sentiment scores for the last 30 days, please analyze the data to predict the stock's closing price for the next day. The dataset includes the following columns: 'Date', 'Average Sentiment', 'Open', 'High', 'Low', 'Close', 'Volume'. Use the 'Average Sentiment' and 'Volume' as features to predict the 'Close' price.{combined_summary}. Here is the linear regression model I have performed for today to assist you in making predictions. {linear_regression_summary} I want you to return to me a prediction with the 'Date' format.",
+                "content": f"Given a dataset with daily stock prices and average sentiment scores for the last 30 days, including 'Date', 'Average Sentiment', 'Open', 'High', 'Low', 'Close', 'Volume', please simulate an analysis to predict the stock's closing price for tomorrow. Assume today's date is YYYY-MM-DD, and use 'Average Sentiment' and 'Volume' as key features in your theoretical model. Here's a summary of a linear regression analysis performed today: [insert summary here]. Based on this, predict the closing price for the next day (YYYY-MM-DD+1), focusing on the impact of 'Average Sentiment' and 'Volume'.",
             },
         ],
     )
