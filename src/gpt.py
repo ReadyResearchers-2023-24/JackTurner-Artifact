@@ -26,7 +26,7 @@ def setup_openai_api(api_key):
 def make_prediction(combined_summary, linear_regression_summary):
     client = OpenAI()
     completion = client.chat.completions.create(
-        model="gpt-4-0125-preview",
+        model="gpt-3.5-turbo",
         messages=[
             {
                 "role": "system",

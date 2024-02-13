@@ -1,11 +1,9 @@
 import os
 import subprocess
 
-
 def run_script(script_path):
     print(f"Running script: {script_path}")
     subprocess.run(["python", script_path])
-
 
 def main():
     # Define the paths to your scripts
@@ -24,6 +22,9 @@ def main():
         full_script_path = os.path.join(current_dir, script_path)
         run_script(full_script_path)
 
+    # After running all necessary scripts, run the Dash application script
+    dash_script_path = os.path.join(current_dir, "gpt.py")
+    run_script(dash_script_path)
 
 if __name__ == "__main__":
     main()
