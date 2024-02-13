@@ -23,7 +23,7 @@ def setup_openai_api():
     os.environ["OPENAI_API_KEY"] = os.getenv("GPT_KEY")  # Use environment variable
 
 # Function to make predictions using OpenAI
-def make_prediction():
+def make_prediction(combined_summary, linear_regression_summary):
     client = OpenAI()
     completion = client.chat.completions.create(
         model="gpt-3.5-turbo",
@@ -34,7 +34,7 @@ def make_prediction():
             },
             {
                 "role": "user",
-                "content": f"Given a dataset with daily stock prices and average sentiment scores for the last 30 days, including 'Date', 'Average Sentiment', 'Open', 'High', 'Low', 'Close', 'Volume', please simulate an analysis to pred    ict the stock's closing price for tomorrow. Assume today's date is YYYY-MM-DD, and use 'Average Sentiment' and 'Volume' as key features in your theoretical model. Here's a summary of a linear regression analysis performed today: [insert summary here]. Based on this, predict the closing price for the next day (YYYY-MM-DD+1), focusing on the impact of 'Average Sentiment' and 'Volume'.",
+                "content": f"Given the attached CSV file named 'combined_data.csv', which contains daily stock prices and average sentiment scores for the last 30 days, please analyze the data to predict the stock's closing price for the next day. The dataset includes the following columns: 'Date', 'Average Sentiment', 'Open', 'High', 'Low', 'Close', 'Volume'. Use the 'Average Sentiment' and 'Volume' as features to predict the 'Close' price.{combined_summary}. Here is the linear regression model I have performed for today to assist you in making predictions. {linear_regression_summary} I want you to return to me a prediction on closing price for the next day.",
             },
         ],
     )
@@ -62,7 +62,7 @@ def main():
     setup_openai_api()
 
     # Make a prediction
-    prediction = make_prediction()
+    prediction = make_prediction(combined_summary, linear_regression_summary)
 
     # Save prediction results to CSV
     prediction_df = pd.DataFrame({"Prediction": [prediction]})

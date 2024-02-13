@@ -22,7 +22,7 @@ def main():
         full_script_path = os.path.join(current_dir, script_path)
         run_script(full_script_path)
 
-    # After running all necessary scripts, run the Dash application script
+    # After running all necessary scripts, run the script
     dash_script_path = os.path.join(current_dir, "gpt.py")
     run_script(dash_script_path)
 
