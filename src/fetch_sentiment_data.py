@@ -2,11 +2,14 @@ import requests
 from textblob import TextBlob
 import pandas as pd
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
 import os
 
+# Load environment variables from .env
+load_dotenv()
 
 # Function to fetch news headlines for a specific date
-def fetch_news(api_key, date):
+def fetch_news(date):
     all_headlines = []
     url = "https://newsapi.org/v2/everything"
     params = {
@@ -15,7 +18,7 @@ def fetch_news(api_key, date):
         "to": date,
         "sortBy": "publishedAt",
         "language": "en",
-        "apiKey": api_key,
+        "apiKey": os.getenv("SENTIMENT_KEY"),  # Use environment variable
     }
     response = requests.get(url, params=params)
     if response.status_code == 200:
@@ -26,15 +29,13 @@ def fetch_news(api_key, date):
         print(f"Failed to fetch news for {date}")
     return all_headlines
 
-
 # Function to calculate average sentiment score for headlines
 def average_sentiment(headlines):
     sentiment_scores = [TextBlob(headline).sentiment.polarity for headline in headlines]
     return sum(sentiment_scores) / len(sentiment_scores) if sentiment_scores else 0
 
-
 # Main function to fetch, process news headlines, and save to CSV
-def main(api_key):
+def main():
     end_date = datetime.now()
     start_date = end_date - timedelta(days=30)
 
@@ -45,7 +46,7 @@ def main(api_key):
 
     for date in dates:
         date_str = date.strftime("%Y-%m-%d")
-        headlines = fetch_news(api_key, date_str)
+        headlines = fetch_news(date_str)
         if headlines:  # Proceed if there are headlines for the day
             avg_sentiment = average_sentiment(headlines)
             average_sentiments.append(
@@ -75,5 +76,4 @@ def main(api_key):
 
 
 if __name__ == "__main__":
-    api_key = "22f6dfa7bb114867a3bcb7c56b6c6410"
-    main(api_key)
+    main()

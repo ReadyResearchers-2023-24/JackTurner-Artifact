@@ -1,7 +1,10 @@
 import os
 from openai import OpenAI
 import pandas as pd
+from dotenv import load_dotenv
 
+# Load environment variables from .env
+load_dotenv()
 
 # Function to load data from the combined CSV file
 def load_data(combined_data_path, linear_regression_data):
@@ -9,21 +12,18 @@ def load_data(combined_data_path, linear_regression_data):
     df_linear = pd.read_csv(linear_regression_data)
     return df_combined, df_linear
 
-
 # Function to create summaries or extract relevant data
 def summarize_data(df_combined, df_linear):
     combined_summary = df_combined.describe().to_string()
     linear_regression_summary = df_linear.describe().to_string()
     return combined_summary, linear_regression_summary
 
-
 # Function to set up OpenAI API key
-def setup_openai_api(api_key):
-    os.environ["OPENAI_API_KEY"] = api_key
-
+def setup_openai_api():
+    os.environ["OPENAI_API_KEY"] = os.getenv("GPT_KEY")  # Use environment variable
 
 # Function to make predictions using OpenAI
-def make_prediction(combined_summary, linear_regression_summary):
+def make_prediction():
     client = OpenAI()
     completion = client.chat.completions.create(
         model="gpt-3.5-turbo",
@@ -39,7 +39,6 @@ def make_prediction(combined_summary, linear_regression_summary):
         ],
     )
     return completion.choices[0].message
-
 
 # Main function to orchestrate the modular components
 def main():
@@ -60,10 +59,10 @@ def main():
     combined_summary, linear_regression_summary = summarize_data(df_combined, df_linear)
 
     # Set up OpenAI API key
-    setup_openai_api("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")
+    setup_openai_api()
 
     # Make a prediction
-    prediction = make_prediction(combined_summary, linear_regression_summary)
+    prediction = make_prediction()
 
     # Save prediction results to CSV
     prediction_df = pd.DataFrame({"Prediction": [prediction]})
