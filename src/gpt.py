@@ -18,9 +18,10 @@ def summarize_data(df_combined, df_linear):
     linear_regression_summary = df_linear.describe().to_string()
     return combined_summary, linear_regression_summary
 
-# Function to set up OpenAI API key
+# Function to set up OpenAI API key with an empty string as a fallback
 def setup_openai_api():
-    os.environ["OPENAI_API_KEY"] = os.getenv("GPT_KEY")  # Use environment variable
+    os.environ["OPENAI_API_KEY"] = os.getenv("GPT_KEY", "")
+
 
 # Function to make predictions using OpenAI
 def make_prediction(combined_summary, linear_regression_summary):
