@@ -13,7 +13,7 @@ def fetch_news(date):
     all_headlines = []
     url = "https://newsapi.org/v2/everything"
     params = {
-        "q": "stock",
+        "q": "Apple",
         "from": date,
         "to": date,
         "sortBy": "publishedAt",
