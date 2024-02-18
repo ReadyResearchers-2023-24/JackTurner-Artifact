@@ -31,8 +31,12 @@ def fetch_news(date):
 
 # Function to calculate average sentiment score for headlines
 def average_sentiment(headlines):
-    sentiment_scores = [TextBlob(headline).sentiment.polarity for headline in headlines]
+    sentiment_scores = []
+    for headline in headlines:
+        if headline:  # Check if headline is not None or empty
+            sentiment_scores.append(TextBlob(headline).sentiment.polarity)
     return sum(sentiment_scores) / len(sentiment_scores) if sentiment_scores else 0
+
 
 # Main function to fetch, process news headlines, and save to CSV
 def main():
