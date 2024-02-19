@@ -1,8 +1,9 @@
 import os
-import pandas as pd
 from openai import OpenAI
+import pandas as pd
 from dotenv import load_dotenv
 import re
+from sklearn.metrics import mean_squared_error
 
 # Load environment variables from .env
 load_dotenv()
@@ -18,25 +19,8 @@ def setup_openai_api():
     os.environ["OPENAI_API_KEY"] = os.getenv("GPT_KEY", "")
 
 
-# Function to extract predicted price from the prediction sentence
-def extract_predicted_price(prediction_sentence):
-    # Use regular expression to find the predicted price in the sentence
-    matches = re.findall(r'\d+(\.\d+)?', prediction_sentence)
-    if matches:
-        return float(matches[0])  # Assuming the first match is the predicted price
-    else:
-        return None  # Return None if no price is found
-
-# Function to calculate Mean Squared Error (MSE)
-def calculate_mse(predicted_price, actual_price):
-    if predicted_price is not None:
-        mse = (predicted_price - actual_price) ** 2
-        return mse
-    else:
-        return None
-
 # Function to make predictions using OpenAI
-def make_prediction(combined_summary, linear_regression_summary, actual_price):
+def make_prediction(combined_summary, linear_regression_summary):
     client = OpenAI()
     completion = client.chat.completions.create(
         model="gpt-3.5-turbo",
@@ -51,19 +35,18 @@ def make_prediction(combined_summary, linear_regression_summary, actual_price):
             },
         ],
     )
-    predicted_sentence = completion.choices[0].message
 
-    # Check if the predicted_sentence is a string
-    if isinstance(predicted_sentence, str):
-        predicted_price = extract_predicted_price(predicted_sentence)
+    predicted_message = str(completion.choices[0].message)  # Convert to string
+    predict_float = re.findall(r"\d+\.\d+", predicted_message)
+    if predict_float:
+        predict_float = float(predict_float[0])
     else:
-        predicted_price = None
+        predict_float = None
 
-    # Calculate MSE
-    mse = calculate_mse(predicted_price, actual_price)
+    actual_price = 182.41
+    mse = mean_squared_error([actual_price], [predict_float])  # Wrap actual_price and predict_float in lists
 
-    return predicted_sentence, mse
-
+    return predicted_message, mse
 
 # Main function to orchestrate the modular components
 def main():
@@ -83,14 +66,14 @@ def main():
     # Set up OpenAI API key
     setup_openai_api()
 
-    # Assuming you have an actual price available
-    actual_price = 100.0  # Replace with the actual price
+    # Insert actual closing price
+    actual_price = 182.41
 
     # Make a prediction
-    prediction, mse = make_prediction(df_combined, df_linear, actual_price)
+    prediction, mse = make_prediction(df_combined, df_linear)
 
-    # Save prediction results and MSE to CSV
-    prediction_df = pd.DataFrame({"Prediction": [prediction], "MSE": [mse]})
+    # Save prediction results to CSV
+    prediction_df = pd.DataFrame({"Prediction": [prediction]})
     prediction_df.to_csv(
         os.path.join(current_dir, "../data/gpt_prediction.csv"), index=False
     )
@@ -101,4 +84,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
