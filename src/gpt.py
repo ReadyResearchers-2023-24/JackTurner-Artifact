@@ -31,7 +31,7 @@ def make_prediction(combined_summary, linear_regression_summary):
             },
             {
                 "role": "user",
-                "content": f"Give me a next day closing price prediction based on the data from these two CSV files: {combined_summary}, {linear_regression_summary}."
+                "content": f"Give me a next day closing price prediction based on the data from the attached file. {combined_summary}."
             },
         ],
     )

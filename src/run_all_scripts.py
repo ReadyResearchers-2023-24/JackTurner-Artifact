@@ -10,7 +10,6 @@ def main():
     script_paths = [
         "fetch_historical_data.py",
         "fetch_sentiment_data.py",
-        "predict_closing_price.py",
         "combine_data.py"
     ]
 
