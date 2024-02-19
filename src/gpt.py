@@ -9,29 +9,27 @@ from sklearn.metrics import mean_squared_error
 load_dotenv()
 
 # Function to load data from the combined CSV file
-def load_data(combined_data_path, linear_regression_data_path):
+def load_data(combined_data_path):
     df_combined = pd.read_csv(combined_data_path)
-    df_linear = pd.read_csv(linear_regression_data_path)
-    return df_combined, df_linear
+    return df_combined
 
 # Function to set up OpenAI API key with an empty string as a fallback
 def setup_openai_api():
     os.environ["OPENAI_API_KEY"] = os.getenv("GPT_KEY", "")
 
-
 # Function to make predictions using OpenAI
-def make_prediction(combined_summary, linear_regression_summary):
+def make_prediction(combined_summary):
     client = OpenAI()
     completion = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
             {
                 "role": "system",
-                "content": "You are a Predictive Modeler. You will be tasked with generating predictive analytics based on data. This involves interpreting the data you've processed and making forecasts, such as predicting stock prices. Your output should be one number. Not a formula",
+                "content": "You are a Predictive Modeler. You will be tasked with generating predictive analytics based on data. This involves interpreting the data you've processed and making forecasts, such as predicting stock prices. Your output should be one number. I need you to give me predictions for the past 30 days based on the data that I am attaching. Make sure the CSV is formatted correctly so that I can easily extract data. ",
             },
             {
                 "role": "user",
-                "content": f"Give me a next day closing price prediction based on the data from the attached file. {combined_summary}."
+                "content": f"{combined_summary}"
             },
         ],
     )
@@ -55,13 +53,10 @@ def main():
     parent_dir = os.path.abspath(os.path.join(current_dir, os.pardir))
 
     # Path to your combined CSV file
-    combined_data_path = os.path.join(parent_dir, "data", "combined_data.csv")
-    linear_data_path = os.path.join(
-        parent_dir, "data", "linear_regression_prediction.csv"
-    )
+    combined_data_path = os.path.join(parent_dir, "data", "modified_combined_data.csv")
 
     # Load the data
-    df_combined, df_linear = load_data(combined_data_path, linear_data_path)
+    df_combined = load_data(combined_data_path)
 
     # Set up OpenAI API key
     setup_openai_api()
@@ -70,7 +65,7 @@ def main():
     actual_price = 182.41
 
     # Make a prediction
-    prediction, mse = make_prediction(df_combined, df_linear)
+    prediction, mse = make_prediction(df_combined)
 
     # Save prediction results to CSV
     prediction_df = pd.DataFrame({"Prediction": [prediction]})
@@ -80,7 +75,6 @@ def main():
 
     print("Prediction:", prediction)
     print("Mean Squared Error:", mse)
-
 
 if __name__ == "__main__":
     main()
