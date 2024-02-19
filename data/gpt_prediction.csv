@@ -1,2 +1,2 @@
 Prediction
-"ChatCompletionMessage(content='Based on the data provided, the next day closing price prediction is 189.072694.', role='assistant', function_call=None, tool_calls=None)"
+"ChatCompletionMessage(content='Based on the provided data, the predicted closing price for the next day is $189.07.', role='assistant', function_call=None, tool_calls=None)"

@@ -1,7 +1,8 @@
 import os
-from openai import OpenAI
 import pandas as pd
+from openai import OpenAI
 from dotenv import load_dotenv
+import re
 
 # Load environment variables from .env
 load_dotenv()
@@ -17,8 +18,25 @@ def setup_openai_api():
     os.environ["OPENAI_API_KEY"] = os.getenv("GPT_KEY", "")
 
 
+# Function to extract predicted price from the prediction sentence
+def extract_predicted_price(prediction_sentence):
+    # Use regular expression to find the predicted price in the sentence
+    matches = re.findall(r'\d+(\.\d+)?', prediction_sentence)
+    if matches:
+        return float(matches[0])  # Assuming the first match is the predicted price
+    else:
+        return None  # Return None if no price is found
+
+# Function to calculate Mean Squared Error (MSE)
+def calculate_mse(predicted_price, actual_price):
+    if predicted_price is not None:
+        mse = (predicted_price - actual_price) ** 2
+        return mse
+    else:
+        return None
+
 # Function to make predictions using OpenAI
-def make_prediction(combined_summary, linear_regression_summary):
+def make_prediction(combined_summary, linear_regression_summary, actual_price):
     client = OpenAI()
     completion = client.chat.completions.create(
         model="gpt-3.5-turbo",
@@ -33,7 +51,19 @@ def make_prediction(combined_summary, linear_regression_summary):
             },
         ],
     )
-    return completion.choices[0].message
+    predicted_sentence = completion.choices[0].message
+
+    # Check if the predicted_sentence is a string
+    if isinstance(predicted_sentence, str):
+        predicted_price = extract_predicted_price(predicted_sentence)
+    else:
+        predicted_price = None
+
+    # Calculate MSE
+    mse = calculate_mse(predicted_price, actual_price)
+
+    return predicted_sentence, mse
+
 
 # Main function to orchestrate the modular components
 def main():
@@ -53,17 +83,22 @@ def main():
     # Set up OpenAI API key
     setup_openai_api()
 
-    # Make a prediction
-    prediction = make_prediction(df_combined, df_linear)
+    # Assuming you have an actual price available
+    actual_price = 100.0  # Replace with the actual price
 
-    # Save prediction results to CSV
-    prediction_df = pd.DataFrame({"Prediction": [prediction]})
+    # Make a prediction
+    prediction, mse = make_prediction(df_combined, df_linear, actual_price)
+
+    # Save prediction results and MSE to CSV
+    prediction_df = pd.DataFrame({"Prediction": [prediction], "MSE": [mse]})
     prediction_df.to_csv(
         os.path.join(current_dir, "../data/gpt_prediction.csv"), index=False
     )
 
     print("Prediction:", prediction)
+    print("Mean Squared Error:", mse)
 
 
 if __name__ == "__main__":
     main()
+

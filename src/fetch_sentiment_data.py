@@ -1,82 +1,85 @@
-import requests
-from textblob import TextBlob
-import pandas as pd
-from datetime import datetime, timedelta
-from dotenv import load_dotenv
 import os
+from openai import OpenAI
+import pandas as pd
+from dotenv import load_dotenv
+import re
+from sklearn.metrics import mean_squared_error
 
 # Load environment variables from .env
 load_dotenv()
 
-# Function to fetch news headlines for a specific date
-def fetch_news(date):
-    all_headlines = []
-    url = "https://newsapi.org/v2/everything"
-    params = {
-        "q": "Apple",
-        "from": date,
-        "to": date,
-        "sortBy": "publishedAt",
-        "language": "en",
-        "apiKey": os.getenv("SENTIMENT_KEY"),  # Use environment variable
-    }
-    response = requests.get(url, params=params)
-    if response.status_code == 200:
-        articles = response.json().get("articles", [])
-        for article in articles:
-            all_headlines.append(article["title"])
+# Function to load data from the combined CSV file
+def load_data(combined_data_path, linear_regression_data_path):
+    df_combined = pd.read_csv(combined_data_path)
+    df_linear = pd.read_csv(linear_regression_data_path)
+    return df_combined, df_linear
+
+# Function to set up OpenAI API key with an empty string as a fallback
+def setup_openai_api():
+    os.environ["OPENAI_API_KEY"] = os.getenv("GPT_KEY", "")
+
+
+# Function to make predictions using OpenAI
+def make_prediction(combined_summary, linear_regression_summary):
+    client = OpenAI()
+    completion = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {
+                "role": "system",
+                "content": "You are a Predictive Modeler. You will be tasked with generating predictive analytics based on data. This involves interpreting the data you've processed and making forecasts, such as predicting stock prices. Your output should be one number. Not a formula",
+            },
+            {
+                "role": "user",
+                "content": f"Give me a next day closing price prediction based on the data from these two CSV files: {combined_summary}, {linear_regression_summary}."
+            },
+        ],
+    )
+
+    predicted_message = str(completion.choices[0].message)  # Convert to string
+    predict_float = re.findall(r"\d+\.\d+", predicted_message)
+    if predict_float:
+        predict_float = float(predict_float[0])
     else:
-        print(f"Failed to fetch news for {date}")
-    return all_headlines
+        predict_float = None
 
-# Function to calculate average sentiment score for headlines
-def average_sentiment(headlines):
-    sentiment_scores = []
-    for headline in headlines:
-        if headline:  # Check if headline is not None or empty
-            sentiment_scores.append(TextBlob(headline).sentiment.polarity)
-    return sum(sentiment_scores) / len(sentiment_scores) if sentiment_scores else 0
+    actual_price = 182.41
+    mse = mean_squared_error([actual_price], [predict_float])  # Wrap actual_price and predict_float in lists
 
+    return predicted_message, mse
 
-# Main function to fetch, process news headlines, and save to CSV
+# Main function to orchestrate the modular components
 def main():
-    end_date = datetime.now()
-    start_date = end_date - timedelta(days=30)
-
-    dates = [
-        start_date + timedelta(days=x) for x in range((end_date - start_date).days + 1)
-    ]
-    average_sentiments = []
-
-    for date in dates:
-        date_str = date.strftime("%Y-%m-%d")
-        headlines = fetch_news(date_str)
-        if headlines:  # Proceed if there are headlines for the day
-            avg_sentiment = average_sentiment(headlines)
-            average_sentiments.append(
-                {"Date": date_str, "Average Sentiment": avg_sentiment}
-            )
-        else:
-            average_sentiments.append({"Date": date_str, "Average Sentiment": 0})
-
-    df = pd.DataFrame(average_sentiments)
-
     # Get the current directory of the script
     current_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.abspath(os.path.join(current_dir, os.pardir))
 
-    # Define the path to the data folder one level up from the script's directory
-    data_folder = os.path.join(current_dir, "..", "data")
+    # Path to your combined CSV file
+    combined_data_path = os.path.join(parent_dir, "data", "combined_data.csv")
+    linear_data_path = os.path.join(
+        parent_dir, "data", "linear_regression_prediction.csv"
+    )
 
-    # Ensure the data folder exists, if not create it
-    if not os.path.exists(data_folder):
-        os.makedirs(data_folder)
+    # Load the data
+    df_combined, df_linear = load_data(combined_data_path, linear_data_path)
 
-    # Define the path for saving the CSV file within the data folder
-    csv_file_path = os.path.join(data_folder, "average_sentiment_daily.csv")
+    # Set up OpenAI API key
+    setup_openai_api()
 
-    # Save to CSV
-    df.to_csv(csv_file_path, index=False)
-    print(f"Saved daily average sentiment to '{csv_file_path}'.")
+    # Insert actual closing price
+    actual_price = 182.41
+
+    # Make a prediction
+    prediction, mse = make_prediction(df_combined, df_linear)
+
+    # Save prediction results to CSV
+    prediction_df = pd.DataFrame({"Prediction": [prediction]})
+    prediction_df.to_csv(
+        os.path.join(current_dir, "../data/gpt_prediction.csv"), index=False
+    )
+
+    print("Prediction:", prediction)
+    print("Mean Squared Error:", mse)
 
 
 if __name__ == "__main__":
