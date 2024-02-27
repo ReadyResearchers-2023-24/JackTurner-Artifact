@@ -25,7 +25,7 @@ def make_prediction(combined_summary):
         messages=[
             {
                 "role": "system",
-                "content": "You are a Predictive Modeler. You will be tasked with generating predictive analytics based on data. This involves interpreting the data you've processed and making forecasts, such as predicting stock prices. Your output should be one number. I need you to give me predictions for the past 30 days based on the data that I am attaching. Make sure the CSV is formatted correctly so that I can easily extract data. ",
+                "content": "You are a Predictive Modeler. You will be tasked with generating predictive analytics based on data. This involves interpreting the data you've processed and making forecasts, such as predicting stock prices. Your output should be one number. I need you to give me predictions for the next day closing price based on the data that I am attaching. Make sure the CSV is formatted correctly so that I can easily extract data. Make sure the date is properly formatted for when your prediction is. ",
             },
             {
                 "role": "user",
@@ -41,7 +41,7 @@ def make_prediction(combined_summary):
     else:
         predict_float = None
 
-    actual_price = 182.41
+    actual_price = 0
     mse = mean_squared_error([actual_price], [predict_float])  # Wrap actual_price and predict_float in lists
 
     return predicted_message, mse
@@ -53,7 +53,7 @@ def main():
     parent_dir = os.path.abspath(os.path.join(current_dir, os.pardir))
 
     # Path to your combined CSV file
-    combined_data_path = os.path.join(parent_dir, "data", "modified_combined_data.csv")
+    combined_data_path = os.path.join(parent_dir, "data", "combined_data.csv")
 
     # Load the data
     df_combined = load_data(combined_data_path)
