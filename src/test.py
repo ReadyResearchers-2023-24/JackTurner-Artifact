@@ -1,7 +1,8 @@
-import csv
 import sqlite3
+import os
 from newsapi import NewsApiClient
 import datetime
+from textblob import TextBlob
 
 # Initialize NewsApiClient with your API key
 api = NewsApiClient(api_key='22f6dfa7bb114867a3bcb7c56b6c6410')
@@ -17,9 +18,20 @@ start_date = end_date - datetime.timedelta(days=30)
 end_date_str = end_date.strftime('%Y-%m-%d')
 start_date_str = start_date.strftime('%Y-%m-%d')
 
-# Initialize lists to store data for CSV and database
-csv_data = []
-db_data = []
+# Path to the database file
+database_path = os.path.join('data', 'stock_news.db')
+
+# Connect to the SQLite database
+conn = sqlite3.connect(database_path)
+c = conn.cursor()
+
+# Check if the 'articles' table exists
+c.execute('''SELECT count(name) FROM sqlite_master WHERE type='table' AND name='articles' ''')
+if c.fetchone()[0] == 0:
+    # If the 'articles' table does not exist, create it
+    c.execute('''CREATE TABLE articles
+                 (symbol TEXT, title TEXT, date TEXT, sentiment_score REAL)''')
+    conn.commit()
 
 # Iterate over ticker symbols
 for symbol in ticker_symbols:
@@ -36,33 +48,18 @@ for symbol in ticker_symbols:
             # Extract only date part from publishedAt
             published_date = article['publishedAt'].split('T')[0]
             
-            # Create a dictionary with title and date
-            article_data = {
-                'title': article['title'],
-                'date': published_date
-            }
+            # Perform sentiment analysis on the article title
+            title = article['title']
+            sentiment_score = TextBlob(title).sentiment.polarity
             
-            # Append data to lists for CSV and database
-            csv_data.append([symbol, article_data['title'], article_data['date']])
-            db_data.append((symbol, article_data['title'], article_data['date']))
+            # Insert the data into the 'articles' table
+            c.execute("INSERT INTO articles VALUES (?, ?, ?, ?)", (symbol, title, published_date, sentiment_score))
+            
     else:
         print(f"Failed to retrieve data for {symbol}. Status:", response['status'])
 
-# Save data to CSV
-with open('stock_news.csv', 'w', newline='', encoding='utf-8') as csvfile:
-    writer = csv.writer(csvfile)
-    writer.writerow(['Symbol', 'Title', 'Date'])
-    writer.writerows(csv_data)
-
-print("Data saved successfully to stock_news.csv")
-
-# Save data to SQLite database
-conn = sqlite3.connect('stock_news.db')
-c = conn.cursor()
-c.execute('''CREATE TABLE IF NOT EXISTS articles
-             (symbol text, title text, date text)''')
-c.executemany('INSERT INTO articles VALUES (?, ?, ?)', db_data)
+# Commit changes and close the database connection
 conn.commit()
 conn.close()
 
-print("Data saved successfully to stock_news.db")
+print("Data saved successfully to", database_path)
