@@ -28,7 +28,7 @@ def make_prediction(df_aapl, df_amzn, df_goog, df_msft, df_tsla):
         messages=[
             {
                 "role": "system",
-                "content": f"Give me a next day closing price prediction based on the five ticker symbols and data attached. {df_aapl,df_amzn,df_goog,df_msft,df_tsla}",
+                "content": f"Give me a next day closing price prediction based on the five ticker symbols and data attached. I need numbers. {df_aapl,df_amzn,df_goog,df_msft,df_tsla}",
             },
 
         ],
