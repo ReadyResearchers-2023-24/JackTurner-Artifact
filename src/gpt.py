@@ -28,7 +28,7 @@ def make_prediction(df_aapl, df_amzn, df_goog, df_msft, df_tsla):
         messages=[
             {
                 "role": "system",
-                "content": f"You are a Predictive Modeler. You will be tasked with generating predictive analytics based on data. This involves interpreting the data you've processed and making forecasts, such as predicting stock prices. Your output should be a your predictions for closing prices based on the five ticker symbols in the attached file. I need you to give me predictions for the next day closing price based on the data that I am attaching. Make sure the CSV is formatted correctly so that I can easily extract data. Make sure the date is properly formatted for when your prediction is. {df_aapl,df_amzn,df_goog,df_msft,df_tsla}",
+                "content": f"Give me a next day closing price prediction based on the five ticker symbols and data attached. {df_aapl,df_amzn,df_goog,df_msft,df_tsla}",
             },
 
         ],
