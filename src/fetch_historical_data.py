@@ -34,6 +34,9 @@ def main(tickers):
 
     # Iterate over ticker symbols
     for ticker in tickers:
+        # Delete existing data for the ticker
+        conn.execute(f"DELETE FROM stock_prices WHERE symbol = '{ticker}'")
+
         # Fetch stock prices
         stock_prices = fetch_stock_prices(ticker)
 
@@ -44,7 +47,6 @@ def main(tickers):
 
     # Close the database connection
     conn.close()
-
 
 if __name__ == "__main__":
     # Ticker symbols you want to fetch historical prices for

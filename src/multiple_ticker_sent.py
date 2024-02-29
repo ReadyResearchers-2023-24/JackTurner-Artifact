@@ -25,16 +25,11 @@ database_path = os.path.join('data', 'stock_news.db')
 conn = sqlite3.connect(database_path)
 c = conn.cursor()
 
-# Check if the 'articles' table exists
-c.execute('''SELECT count(name) FROM sqlite_master WHERE type='table' AND name='articles' ''')
-if c.fetchone()[0] == 0:
-    # If the 'articles' table does not exist, create it
-    c.execute('''CREATE TABLE articles
-                 (symbol TEXT, title TEXT, date TEXT, sentiment_score REAL)''')
-    conn.commit()
-
 # Iterate over ticker symbols
 for symbol in ticker_symbols:
+    # Delete existing articles for the symbol
+    c.execute("DELETE FROM articles WHERE symbol = ?", (symbol,))
+
     # Make a request to get everything related to a specific ticker symbol for the past month
     response = api.get_everything(q=symbol, from_param=start_date_str, to=end_date_str)
     
