@@ -25,7 +25,7 @@ sentiment_data['symbol'] = sentiment_data['symbol'].map(symbol_mapping)
 
 # Query to fetch stock prices data from the database
 query = """
-    SELECT "symbol", "Date", "Open", "High", "Low", "Volume"
+    SELECT "symbol", "Date", "Open", "High", "Low"
     FROM stock_prices
 """
 
