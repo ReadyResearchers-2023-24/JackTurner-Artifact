@@ -3,16 +3,27 @@ import os
 from newsapi import NewsApiClient
 import datetime
 from textblob import TextBlob
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Get the API key from the environment
+api_key = os.getenv('NEWS_API_KEY')
+
+# Check if API key is not found
+if api_key is None:
+    raise ValueError("API key not found in .env file")
 
 # Initialize NewsApiClient with your API key
-api = NewsApiClient(api_key='22f6dfa7bb114867a3bcb7c56b6c6410')
+api = NewsApiClient(api_key=api_key)
 
 # Ticker symbols you want to search for
 ticker_symbols = ['apple', 'google', 'amazon','microsoft','tesla']
 
 # Calculate the date range for the past month
 end_date = datetime.datetime.now()
-start_date = end_date - datetime.timedelta(days=30)
+start_date = end_date - datetime.timedelta(days=29)
 
 # Format dates as strings
 end_date_str = end_date.strftime('%Y-%m-%d')
@@ -43,12 +54,17 @@ for symbol in ticker_symbols:
             # Extract only date part from publishedAt
             published_date = article['publishedAt'].split('T')[0]
             
-            # Perform sentiment analysis on the article title
-            title = article['title']
-            sentiment_score = TextBlob(title).sentiment.polarity
+            # Convert published date to datetime object
+            published_date_obj = datetime.datetime.strptime(published_date, '%Y-%m-%d')
             
-            # Insert the data into the 'articles' table
-            c.execute("INSERT INTO articles VALUES (?, ?, ?, ?)", (symbol, title, published_date, sentiment_score))
+            # Check if the article is from the past month
+            if published_date_obj >= start_date and published_date_obj <= end_date:
+                # Perform sentiment analysis on the article title
+                title = article['title']
+                sentiment_score = TextBlob(title).sentiment.polarity
+
+                # Insert the data into the 'articles' table
+                c.execute("INSERT INTO articles VALUES (?, ?, ?, ?)", (symbol, title, published_date, sentiment_score))
             
     else:
         print(f"Failed to retrieve data for {symbol}. Status:", response['status'])
