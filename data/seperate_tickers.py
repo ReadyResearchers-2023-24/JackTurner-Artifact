@@ -16,7 +16,7 @@ for row in data:
 
 # Write data to separate files
 for ticker, rows in ticker_data.items():
-    filename = f'{ticker}_data.csv'
+    filename = f'data/{ticker}_data.csv'
     with open(filename, 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(['symbol', 'Date', 'Open', 'High', 'Low', 'avg_sentiment_score'])
