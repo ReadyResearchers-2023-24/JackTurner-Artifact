@@ -16,12 +16,16 @@ This project aims to predict stock prices using sentiment analysis data combined
 - yfinance
 - textblob
 - requests
+- csv
+- newsapi
+- dotenv
 
 ## Usage
-1. Clone the repository: `git clone https://github.com/your_username/stock-price-prediction.git`
+1. Clone the repository: `git clone https://github.com/ReadyResearchers-2023-24/JackTurner-Artifact`
 2. Install the required dependencies: `pip install -r requirements.txt`
-3. Navigate to the `src` folder `cd src`
-4. Execute the `run_all_scripts.py` file: `python3 run_all_scripts.py`
-5. Results will be displayed in the command line and stored in the `data` folder under the name: `gpt_prediction.csv`
+3. Run the provided Python script: `python3 run_all.py`
+4. Results will be displayed in the command line and stored in the `data` folder under the name: `gpt_prediction.csv`
 
-
+## Additional Notes
+- Modify the prompt in `gpt.py` to determine the desired output format.
+- Sometimes, the data size may exceed the capacity of the ChatGPT API. In such cases, consider removing one or two CSV files from the `data` folder to allow processing a smaller batch at a time, ensuring more consistent results.
