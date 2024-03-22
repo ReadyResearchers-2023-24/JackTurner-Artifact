@@ -1,7 +1,7 @@
 # Stock Price Prediction with Sentiment Analysis
 
 ## Overview
-This project aims to predict stock prices using sentiment analysis data combined with historical stock prices. By leveraging machine learning techniques, specifically linear regression, we analyze the relationship between sentiment scores and stock prices to forecast future price movements.
+This project forecasts stock prices for five major companies—Apple, Amazon, Tesla, Google, and Microsoft—by integrating sentiment analysis data with historical stock prices. Employing machine learning techniques, this project examines the correlation between sentiment scores and stock prices to predict future price movements. The combined dataset for these selected ticker symbols is processed through ChatGPT, which then outputs a CSV file with predictions on future stock price movements.
 
 ## Features
 - **Data Sources:** Utilizes historical stock price data and sentiment analysis scores
