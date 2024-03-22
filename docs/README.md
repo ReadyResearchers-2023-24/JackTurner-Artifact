@@ -7,7 +7,7 @@ This project forecasts stock prices for five major companies—Apple, Amazon, Te
 The dynamic nature of financial markets and the significant impact of investor sentiment on stock prices necessitate a multifaceted approach to prediction. By leveraging both quantitative historical data and qualitative sentiment analysis, this project aims to provide a more comprehensive tool for predicting stock market movements, enhancing decision-making processes for investors.
 
 ## Associated Thesis
-The related thesis, detailing the research, methodology, and findings of this project, is published within this repository [Repo]([https://link-url-here.org](https://github.com/ReadyResearchers-2023-24/cis-600-f2023-610-s2024-senior-thesis-jackturner83)).
+The related thesis, detailing the research, methodology, and findings of this project, is published within this repository [Repo](https://github.com/ReadyResearchers-2023-24/cis-600-f2023-610-s2024-senior-thesis-jackturner83)]
 
 ## Features
 - **Data Sources:** Utilizes historical stock price data and sentiment analysis scores
