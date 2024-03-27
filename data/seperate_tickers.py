@@ -1,7 +1,7 @@
 import csv
 
 # Read the data
-with open('data/combined_data.csv', 'r') as file:
+with open('data/combineddata.csv', 'r') as file:
     reader = csv.reader(file)
     next(reader)  # Skip header
     data = [row for row in reader]

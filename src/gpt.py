@@ -12,7 +12,7 @@ load_dotenv()
 def load_data(data_dir):
     dfs = {}
     for filename in os.listdir(data_dir):
-        if filename.endswith("data.csv"):
+        if filename.endswith("_data.csv"):
             ticker = os.path.splitext(filename)[0]
             dfs[ticker] = pd.read_csv(os.path.join(data_dir, filename))
     return dfs
@@ -29,7 +29,7 @@ def make_prediction(df):
         messages=[
             {
                 "role": "system",
-                "content": f"Give me a closing price prediction every day for the past month based on the data attached. {df.to_string()}",
+                "content": f"Give me a closing price prediction every day for the past month based on the data attached. I need numbers.{df.to_string()}",
             },
         ],
     )

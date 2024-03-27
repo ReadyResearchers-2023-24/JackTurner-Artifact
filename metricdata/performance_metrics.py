@@ -22,7 +22,6 @@ def calculate_metrics(data):
     metrics['RMSE'] = root_mean_squared_error(actual, predicted)
     metrics['R_squared'] = r_squared(actual, predicted)
     metrics['Explained_Variance'] = ev_score(actual, predicted)
-    metrics['Median_Absolute_Error'] = median_absolute_error(actual, predicted)
     return metrics
 
 # Function to calculate Mean Absolute Error (MAE)
@@ -67,18 +66,13 @@ def analyze_all_files(directory_path):
         metrics_results[ticker] = metrics
     return metrics_results
 
-# Function to plot performance metrics for each ticker
 def plot_metrics(metrics_results):
-    # Convert metrics results to DataFrame
     metrics_df = pd.DataFrame(metrics_results).T
-    # Plot bar graph
-    metrics_df.plot(kind='bar', figsize=(12, 8))
-    # Add title and labels
+    metrics_df.plot(kind='bar', figsize=(12, 8), alpha=0.7)  # Add transparency
     plt.title('Performance Metrics for Each Ticker')
     plt.xlabel('Ticker')
     plt.ylabel('Metric Value')
     plt.xticks(rotation=45)
-    # Show plot
     plt.legend(loc='upper left', bbox_to_anchor=(1.0, 1.0))
     plt.tight_layout()
     plt.show()

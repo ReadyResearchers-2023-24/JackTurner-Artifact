@@ -54,6 +54,6 @@ combined_data = pd.merge(stock_prices_data, sentiment_data, how='inner', left_on
 combined_data.drop(columns=['date'], inplace=True)
 
 # Save the combined data to a CSV file
-combined_data.to_csv('data/combined_data.csv', index=False)
+combined_data.to_csv('data/combineddata.csv', index=False)
 
-print("\nCombined data saved to combined_data.csv")
+print("\nCombined data saved to combineddata.csv")
