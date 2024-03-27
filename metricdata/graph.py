@@ -12,10 +12,10 @@ def create_line_graph(file_path):
     prediction = df['Prediction']
     actual = df['Actual']
     
-    # Plot line graph
+    # Plot line graph with transparency
     plt.figure(figsize=(10, 6))
-    plt.plot(date, prediction, label='Prediction', marker='o')
-    plt.plot(date, actual, label='Actual', marker='o')
+    plt.plot(date, prediction, label='Prediction', marker='o', alpha=0.7)  # Set transparency to 0.7
+    plt.plot(date, actual, label='Actual', marker='o', alpha=0.7)  # Set transparency to 0.7
     
     # Add title and labels
     file_name = os.path.splitext(os.path.basename(file_path))[0]
@@ -31,7 +31,7 @@ def create_line_graph(file_path):
     
     # Save graph as image file
     file_name = file_name + '_line_graph.png'
-    plt.savefig(file_name, bbox_inches='tight')  # Adjusted to fit the date in the picture
+    plt.savefig(file_name, bbox_inches='tight', transparent=True)  # Save with transparency
     plt.close()
 
 # Directory path containing CSV files
