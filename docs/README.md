@@ -11,7 +11,6 @@ The related thesis, detailing the research, methodology, and findings of this pr
 
 ## Features
 - **Data Sources:** Utilizes historical stock price data and sentiment analysis scores
-- **Machine Learning Model:** Implements linear regression to predict stock prices
 - **Prediction Outputs:** Provides Mean Squared Error (MSE) and predicted closing price for the next day
 - **Integration with OpenAI GPT-3:** Utilizes OpenAI's GPT-3 for generating predictions based on provided data
 
